@@ -1,5 +1,7 @@
 package net.webby.protostuff.runtime;
 
+import com.dyuproject.protostuff.Schema;
+
 /**
  * Collection of proto file generators based on different schema types of the Protostuff
  * 
@@ -9,8 +11,8 @@ package net.webby.protostuff.runtime;
 
 public final class Generators {
 
-	public static RuntimeProtoGenerator newRuntimeProtoGenerator() {
-		return new RuntimeProtoGenerator();
+	public static RuntimeProtoGenerator newRuntimeProtoGenerator(Schema<?> schema) {
+		return new RuntimeProtoGenerator(schema);
 	}
 	
 }

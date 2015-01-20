@@ -1,6 +1,5 @@
 package net.webby.protostuff.runtime;
 
-import com.dyuproject.protostuff.Schema;
 
 /**
  * Proto File Generator base interface
@@ -11,6 +10,10 @@ import com.dyuproject.protostuff.Schema;
 
 public interface ProtoGenerator {
 
-	void generate(Schema<?> schema, String outerClassname, StringBuilder output);
+	ProtoGenerator setPackageName(String packageName);
+	
+	ProtoGenerator setOuterClassName(String outerClassName);
+	
+	String generate();
 	
 }

@@ -22,32 +22,55 @@ import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
 public class RuntimeProtoGenerator implements ProtoGenerator {
 
-	@Override
-	public void generate(Schema<?> schema, String outerClassname, StringBuilder output) {
-		
-		if (schema instanceof RuntimeSchema) {
-			generateProto(schema, outerClassname, output, new HashSet<String>());
-		}
-		else {
+	private final Schema<?> schema;
+	private String packageName;
+	private String outerClassName = null;
+	private Set<String> generatedMessages = new HashSet<String>();
+	private StringBuilder output = new StringBuilder();
+	
+	public RuntimeProtoGenerator(Schema<?> schema) {
+		this.schema = schema;
+		if (!(schema instanceof RuntimeSchema)) {
 			throw new IllegalArgumentException("schema instance must be a RuntimeSchema");
 		}
 		
+		Class<?> typeClass = schema.typeClass();
+		this.packageName = typeClass.getPackage().getName();
+	}
+	
+	@Override
+	public ProtoGenerator setOuterClassName(String outerClassName) {
+		this.outerClassName = outerClassName;
+		return this;
 	}
 
-	public <T> void generateProto(Schema<?> schema, String outerClassname, StringBuilder output,
-			Set<String> filterMessages) {
+	@Override
+	public ProtoGenerator setPackageName(String packageName) {
+		this.packageName = packageName;
+		return this;
+	}
+	
+	@Override
+	public String generate() {
+		if (output.length() == 0) {
+			generateInternal();
+		}
+		return output.toString();
+	}
 
-		Class<?> schemaCls = schema.typeClass();
+	public void generateInternal() {
 
-		output.append("option java_package = \"").append(schemaCls.getPackage().getName()).append("\";\n");
-		output.append("option java_outer_classname=\"").append(outerClassname).append("\";\n");
+		output.append("option java_package = \"").append(packageName).append("\";\n");
+		
+		if (outerClassName != null) {
+			output.append("option java_outer_classname=\"").append(outerClassName).append("\";\n");
+		}
 
-		doGenerateProto(schema, schemaCls.getPackage().getName(), outerClassname, output, filterMessages);
+		doGenerateProto(schema);
 
 	}
 
-	protected void doGenerateProto(Schema<?> schema, String packageName, String outerClassname,
-			StringBuilder output, Set<String> filterMessages) {
+	protected void doGenerateProto(Schema<?> schema) {
 
 		Map<String, Message> generateAdditionalMessages = null;
 
@@ -89,7 +112,7 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 					Schema<?> fieldSchema = hasSchema.getSchema();
 					fieldType = fieldSchema.messageName();
 
-					if (!filterMessages.contains(fieldType)) {
+					if (!generatedMessages.contains(fieldType)) {
 						if (generateAdditionalMessages == null) {
 							generateAdditionalMessages = new HashMap<String, Message>();
 						}
@@ -118,9 +141,8 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 
 		if (generateAdditionalMessages != null) {
 			for (Map.Entry<String, Message> entry : generateAdditionalMessages.entrySet()) {
-				filterMessages.add(entry.getKey());
-				String messagePackageName = entry.getValue().typeClass.getPackage().getName();
-				doGenerateProto(entry.getValue().schema, messagePackageName, outerClassname, output, filterMessages);
+				generatedMessages.add(entry.getKey());
+				doGenerateProto(entry.getValue().schema);
 			}
 		}
 
