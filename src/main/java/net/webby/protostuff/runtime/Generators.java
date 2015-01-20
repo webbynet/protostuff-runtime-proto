@@ -9,7 +9,7 @@ package net.webby.protostuff.runtime;
 
 public final class Generators {
 
-	public static RuntimeProtoGenerator getRuntimeProtoGenerator() {
+	public static RuntimeProtoGenerator newRuntimeProtoGenerator() {
 		return new RuntimeProtoGenerator();
 	}
 	
