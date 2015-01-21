@@ -11,6 +11,7 @@
 
     <properties>
       <protostuff.version>1.0.9</protostuff.version>
+      <antlr3.version>3.2</antlr3.version>
     </properties>
 
 	<dependencies>
@@ -26,7 +27,20 @@
 			<artifactId>protostuff-runtime</artifactId>
 			<version>${protostuff.version}</version>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>com.dyuproject.protostuff</groupId>
+			<artifactId>protostuff-parser</artifactId>
+			<version>${protostuff.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+	    <dependency>
+	      <groupId>org.antlr</groupId>
+	      <artifactId>antlr-runtime</artifactId>
+	      <version>${antlr3.version}</version>
+	    </dependency>		
+		
         <!-- TEST -->
 		<dependency>
 			<groupId>junit</groupId>

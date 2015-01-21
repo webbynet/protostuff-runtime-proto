@@ -24,6 +24,7 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 
 	private final Schema<?> schema;
 	private String packageName;
+	private String javaPackageName;
 	private String outerClassName = null;
 	private Set<String> generatedMessages = new HashSet<String>();
 	private StringBuilder output = new StringBuilder();
@@ -35,11 +36,12 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 		}
 		
 		Class<?> typeClass = schema.typeClass();
-		this.packageName = typeClass.getPackage().getName();
+		this.javaPackageName = typeClass.getPackage().getName();
+		this.packageName = this.javaPackageName.replace('.', '_');
 	}
 	
 	@Override
-	public ProtoGenerator setOuterClassName(String outerClassName) {
+	public ProtoGenerator setJavaOuterClassName(String outerClassName) {
 		this.outerClassName = outerClassName;
 		return this;
 	}
@@ -47,6 +49,12 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 	@Override
 	public ProtoGenerator setPackageName(String packageName) {
 		this.packageName = packageName;
+		return this;
+	}
+	
+	@Override
+	public ProtoGenerator setJavaPackageName(String packageName) {
+		this.javaPackageName = packageName;
 		return this;
 	}
 	
@@ -60,11 +68,15 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 
 	public void generateInternal() {
 
-		output.append("option java_package = \"").append(packageName).append("\";\n");
+		output.append("package ").append(packageName).append(";\n\n");
+		
+		output.append("option java_package = \"").append(javaPackageName).append("\";\n");
 		
 		if (outerClassName != null) {
 			output.append("option java_outer_classname=\"").append(outerClassName).append("\";\n");
 		}
+		
+		output.append("\n");
 
 		doGenerateProto(schema);
 

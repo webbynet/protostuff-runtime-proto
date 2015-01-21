@@ -12,7 +12,9 @@ public interface ProtoGenerator {
 
 	ProtoGenerator setPackageName(String packageName);
 	
-	ProtoGenerator setOuterClassName(String outerClassName);
+	ProtoGenerator setJavaPackageName(String javaPackageName);
+	
+	ProtoGenerator setJavaOuterClassName(String outerClassName);
 	
 	String generate();
 	
