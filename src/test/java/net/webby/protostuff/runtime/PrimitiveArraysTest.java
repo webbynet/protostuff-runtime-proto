@@ -13,7 +13,6 @@ import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.parser.Field;
 import com.dyuproject.protostuff.parser.Message;
-import com.dyuproject.protostuff.parser.MessageField;
 import com.dyuproject.protostuff.parser.Proto;
 import com.dyuproject.protostuff.parser.ProtoUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
@@ -26,7 +25,7 @@ public class PrimitiveArraysTest {
 	@Test
 	public void test() throws Exception {
 		
-		String content = Generators.newRuntimeProtoGenerator(schema).generate();
+		String content = Generators.newProtoGenerator(schema).generate();
 		
 		System.out.println(content);
 		

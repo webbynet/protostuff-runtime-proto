@@ -1,6 +1,7 @@
 package net.webby.protostuff.runtime;
 
 import com.dyuproject.protostuff.Schema;
+import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
 /**
  * Collection of proto file generators based on different schema types of the Protostuff
@@ -11,8 +12,11 @@ import com.dyuproject.protostuff.Schema;
 
 public final class Generators {
 
-	public static RuntimeProtoGenerator newRuntimeProtoGenerator(Schema<?> schema) {
-		return new RuntimeProtoGenerator(schema);
+	public static ProtoGenerator newProtoGenerator(Schema<?> schema) {
+		if (schema instanceof RuntimeSchema) {
+			return new RuntimeProtoGenerator(schema);
+		}
+		throw new IllegalArgumentException("unsupported schema type " + schema.getClass());
 	}
 	
 }

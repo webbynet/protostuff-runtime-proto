@@ -13,12 +13,12 @@ import com.dyuproject.protostuff.parser.Proto;
 import com.dyuproject.protostuff.parser.ProtoUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
-public class PrimitiveTest {
+public class WrapperTest {
 
 	@Test
 	public void test() throws Exception {
-
-		Schema<PrimitiveClass> schema = RuntimeSchema.getSchema(PrimitiveClass.class);
+		
+		Schema<WrapperClass> schema = RuntimeSchema.getSchema(WrapperClass.class);
 		
 		String content = Generators.newProtoGenerator(schema).generate();
 		
@@ -34,10 +34,10 @@ public class PrimitiveTest {
 		Assert.assertEquals(0, proto.getEnumGroups().size());
 		Assert.assertEquals(1, proto.getMessages().size());
 		
-		Message primitiveMsg = proto.getMessage("PrimitiveClass");
+		Message primitiveMsg = proto.getMessage("WrapperClass");
 		Assert.assertNotNull(primitiveMsg);
 		
-		Assert.assertEquals(7,  primitiveMsg.getFieldCount());
+		Assert.assertEquals(8,  primitiveMsg.getFieldCount());
 		Assert.assertTrue(primitiveMsg.getField("booleanValue") instanceof Field.Bool);
 		Assert.assertTrue(primitiveMsg.getField("byteValue") instanceof Field.UInt32);
 		Assert.assertTrue(primitiveMsg.getField("shortValue") instanceof Field.UInt32);
@@ -45,6 +45,7 @@ public class PrimitiveTest {
 		Assert.assertTrue(primitiveMsg.getField("longValue") instanceof Field.Int64);
 		Assert.assertTrue(primitiveMsg.getField("floatValue") instanceof Field.Float);
 		Assert.assertTrue(primitiveMsg.getField("doubleValue") instanceof Field.Double);
+		Assert.assertEquals("DynamicObject", primitiveMsg.getField("objValue").getJavaType());
 	}
 	
 }

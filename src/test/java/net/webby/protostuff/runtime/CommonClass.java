@@ -10,18 +10,18 @@ import com.dyuproject.protostuff.Tag;
 public class CommonClass {
 
 	@Tag(1)
-	private String stringValue;
+	protected String stringValue;
 
 	@Tag(2)
-	private Date dateValue;
+	protected Date dateValue;
 
 	@Tag(3)
-	private BigInteger biValue;
+	protected BigInteger biValue;
 
 	@Tag(4)
-	private BigDecimal bdValue;
+	protected BigDecimal bdValue;
 	
 	@Tag(5)
-	private UUID uuidValue;
+	protected UUID uuidValue;
 
 }

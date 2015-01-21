@@ -21,7 +21,7 @@ public class CommonTest {
 
 		Schema<CommonClass> schema = RuntimeSchema.getSchema(CommonClass.class);
 		
-		String content = Generators.newRuntimeProtoGenerator(schema).generate();
+		String content = Generators.newProtoGenerator(schema).generate();
 		
 		System.out.println(content);
 		

@@ -49,11 +49,11 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 	private StringBuilder output = new StringBuilder();
 	
 	public RuntimeProtoGenerator(Schema<?> schema) {
-		this.schema = schema;
 		if (!(schema instanceof RuntimeSchema)) {
 			throw new IllegalArgumentException("schema instance must be a RuntimeSchema");
 		}
 		
+		this.schema = schema;
 		Class<?> typeClass = schema.typeClass();
 		this.javaPackageName = typeClass.getPackage().getName();
 		this.packageName = this.javaPackageName.replace('.', '_');
@@ -129,15 +129,14 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 				String fieldType = null;
 				if (field.type == FieldType.MESSAGE) {
 
-					Class<?> fieldClass = normalizeFieldClass(field);
-					if (fieldClass == null) {
+					Pair<RuntimeFieldType, Class<?>> normField = normalizeFieldClass(field);
+					if (normField == null) {
 						throw new IllegalStateException(
 								"unknown fieldClass " + field.getClass());
 					}
 
-					String fieldClassName = fieldClass.getSimpleName();
-					
-					if (fieldClassName.equals("RuntimeMessageField")) {
+					Class<?> fieldClass = normField.getSecond();
+					if (normField.getFirst() == RuntimeFieldType.RuntimeMessageField) {
 					
 						Field typeClassField = fieldClass.getDeclaredField("typeClass");
 						typeClassField.setAccessible(true);
@@ -158,16 +157,27 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 						}
 					
 					}
-					else if (fieldClassName.equals("RuntimeObjectField")) {
+					else if (normField.getFirst() == RuntimeFieldType.RuntimeObjectField) {
 						
-						//Field schemaField = fieldClass.getDeclaredField("schema");
-						//schemaField.setAccessible(true);
+						Field schemaField = fieldClass.getDeclaredField("schema");
+						schemaField.setAccessible(true);
 						
-						//Schema<?> fieldSchema = (Schema<?>) schemaField.get(field);
+						Schema<?> fieldSchema = (Schema<?>) schemaField.get(field);
+						Pair<RuntimeSchemaType, Class<?>> normSchema = normalizeSchemaClass(fieldSchema.getClass());
+						if (normSchema == null) {
+							throw new IllegalStateException("unknown schema type " + fieldSchema.getClass());
+						}
 						
-						fieldType = "ArrayObject";
-						//Class<?> fieldSchemaClass = normalizeSchemaClass(fieldSchema.getClass());
-						//System.out.println(getClassHierarchy(fieldSchemaClass));
+						switch(normSchema.getFirst()) {
+						case ArraySchema:
+							fieldType = "ArrayObject";
+							break;
+						case ObjectSchema:
+							fieldType = "DynamicObject";
+							break;
+						}
+						
+						//System.out.println(getClassHierarchy(normSchema.getSecond()));
 						
 					}
 					else {
@@ -217,24 +227,23 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 		return str.toString();
   }
 	
-	private Class<?> normalizeSchemaClass(Class<?> schemaClass) {
+	private Pair<RuntimeSchemaType, Class<?>> normalizeSchemaClass(Class<?> schemaClass) {
 		while (schemaClass != Object.class) {
-			if (schemaClass.getSimpleName().equals("ArraySchema")) {
-				return schemaClass;
+			RuntimeSchemaType type = RuntimeSchemaType.findByName(schemaClass.getSimpleName());
+			if (type != null) {
+				return new Pair<RuntimeSchemaType, Class<?>>(type, schemaClass);
 			}
 			schemaClass = schemaClass.getSuperclass();
 		}
 		return null;
 	}
 	
-	private Class<?> normalizeFieldClass(com.dyuproject.protostuff.runtime.MappedSchema.Field<?> field) {
+	private Pair<RuntimeFieldType, Class<?>> normalizeFieldClass(com.dyuproject.protostuff.runtime.MappedSchema.Field<?> field) {
 		Class<?> fieldClass = field.getClass();
 		while (fieldClass != Object.class) {
-			if (fieldClass.getSimpleName().equals("RuntimeMessageField")) {
-				return fieldClass;
-			}
-			if (fieldClass.getSimpleName().equals("RuntimeObjectField")) {
-				return fieldClass;
+			RuntimeFieldType type = RuntimeFieldType.findByName(fieldClass.getSimpleName());
+			if (type != null) {
+				return new Pair<RuntimeFieldType, Class<?>>(type, fieldClass);
 			}
 			fieldClass = fieldClass.getSuperclass();
 		}
