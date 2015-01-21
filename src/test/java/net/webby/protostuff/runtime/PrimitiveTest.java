@@ -37,9 +37,10 @@ public class PrimitiveTest {
 		Message primitiveMsg = proto.getMessage("PrimitiveClass");
 		Assert.assertNotNull(primitiveMsg);
 		
-		Assert.assertEquals(7,  primitiveMsg.getFieldCount());
+		Assert.assertEquals(8,  primitiveMsg.getFieldCount());
 		Assert.assertTrue(primitiveMsg.getField("booleanValue") instanceof Field.Bool);
 		Assert.assertTrue(primitiveMsg.getField("byteValue") instanceof Field.UInt32);
+		Assert.assertTrue(primitiveMsg.getField("charValue") instanceof Field.UInt32);
 		Assert.assertTrue(primitiveMsg.getField("shortValue") instanceof Field.UInt32);
 		Assert.assertTrue(primitiveMsg.getField("intValue") instanceof Field.Int32);
 		Assert.assertTrue(primitiveMsg.getField("longValue") instanceof Field.Int64);

@@ -11,18 +11,21 @@ public class PrimitiveArraysClass {
 	protected byte[] byteValue;
 
 	@Tag(3)
+	protected char[] charValue;
+	
+	@Tag(4)
 	protected short[] shortValue;
 
-	@Tag(4)
+	@Tag(5)
 	protected int[] intValue;
 
-	@Tag(5)
+	@Tag(6)
 	protected long[] longValue;
 
-	@Tag(6)
+	@Tag(7)
 	protected float[] floatValue;
 
-	@Tag(7)
+	@Tag(8)
 	protected double[] doubleValue;
 	
 }

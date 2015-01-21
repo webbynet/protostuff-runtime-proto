@@ -42,9 +42,10 @@ public class PrimitiveArraysTest {
 		Message primitiveMsg = proto.getMessage("PrimitiveArraysClass");
 		Assert.assertNotNull(primitiveMsg);
 		
-		Assert.assertEquals(7,  primitiveMsg.getFieldCount());
+		Assert.assertEquals(8,  primitiveMsg.getFieldCount());
 		Assert.assertEquals("ArrayObject", primitiveMsg.getField("booleanValue").getJavaType());
 		Assert.assertTrue(primitiveMsg.getField("byteValue") instanceof Field.Bytes);
+		Assert.assertEquals("ArrayObject", primitiveMsg.getField("charValue").getJavaType());
 		Assert.assertEquals("ArrayObject", primitiveMsg.getField("shortValue").getJavaType());
 		Assert.assertEquals("ArrayObject", primitiveMsg.getField("intValue").getJavaType());
 		Assert.assertEquals("ArrayObject", primitiveMsg.getField("longValue").getJavaType());

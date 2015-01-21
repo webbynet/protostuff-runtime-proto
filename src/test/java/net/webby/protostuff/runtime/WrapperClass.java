@@ -11,21 +11,24 @@ public class WrapperClass {
 	protected Byte byteValue;
 
 	@Tag(3)
+	protected Character charValue;
+	
+	@Tag(4)
 	protected Short shortValue;
 
-	@Tag(4)
+	@Tag(5)
 	protected Integer intValue;
 
-	@Tag(5)
+	@Tag(6)
 	protected Long longValue;
 
-	@Tag(6)
+	@Tag(7)
 	protected Float floatValue;
 
-	@Tag(7)
+	@Tag(8)
 	protected Double doubleValue;
 	
-	@Tag(8)
+	@Tag(9)
 	protected Object objValue;
 	
 }
