@@ -14,7 +14,7 @@ import com.dyuproject.protostuff.parser.Proto;
 import com.dyuproject.protostuff.parser.ProtoUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
-public class CommonClassTest {
+public class CommonTest {
 
 	@Test
 	public void test() throws Exception {

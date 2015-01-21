@@ -13,7 +13,7 @@ import com.dyuproject.protostuff.parser.Proto;
 import com.dyuproject.protostuff.parser.ProtoUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
-public class PrimitiveClassTest {
+public class PrimitiveTest {
 
 	@Test
 	public void test() throws Exception {

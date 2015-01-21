@@ -107,28 +107,58 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 				String fieldType = null;
 				if (field.type == FieldType.MESSAGE) {
 
-					Class<?> messageFieldClass = findMessageFieldClass(field);
-					if (messageFieldClass == null) {
+					Class<?> fieldClass = normalizeFieldClass(field);
+					if (fieldClass == null) {
 						throw new IllegalStateException(
-								"expected RuntimeMessageField for message field, probably invalid protostuff version");
+								"unknown fieldClass " + field.getClass());
 					}
 
-					Field typeClassField = messageFieldClass.getDeclaredField("typeClass");
-					typeClassField.setAccessible(true);
-					Class<?> typeClass = (Class<?>) typeClassField.get(field);
-
-					Field hasSchemaField = messageFieldClass.getDeclaredField("hasSchema");
-					hasSchemaField.setAccessible(true);
-
-					HasSchema<?> hasSchema = (HasSchema<?>) hasSchemaField.get(field);
-					Schema<?> fieldSchema = hasSchema.getSchema();
-					fieldType = fieldSchema.messageName();
-
-					if (!generatedMessages.contains(fieldType)) {
-						if (generateAdditionalMessages == null) {
-							generateAdditionalMessages = new HashMap<String, Message>();
+					String fieldClassName = fieldClass.getSimpleName();
+					
+					if (fieldClassName.equals("RuntimeMessageField")) {
+					
+						Field typeClassField = fieldClass.getDeclaredField("typeClass");
+						typeClassField.setAccessible(true);
+						Class<?> typeClass = (Class<?>) typeClassField.get(field);
+	
+						Field hasSchemaField = fieldClass.getDeclaredField("hasSchema");
+						hasSchemaField.setAccessible(true);
+	
+						HasSchema<?> hasSchema = (HasSchema<?>) hasSchemaField.get(field);
+						Schema<?> fieldSchema = hasSchema.getSchema();
+						fieldType = fieldSchema.messageName();
+	
+						if (!generatedMessages.contains(fieldType)) {
+							if (generateAdditionalMessages == null) {
+								generateAdditionalMessages = new HashMap<String, Message>();
+							}
+							generateAdditionalMessages.put(fieldType, new Message(typeClass, fieldSchema));
 						}
-						generateAdditionalMessages.put(fieldType, new Message(typeClass, fieldSchema));
+					
+					}
+					if (fieldClassName.equals("RuntimeObjectField")) {
+						
+						Field schemaField = fieldClass.getDeclaredField("schema");
+						schemaField.setAccessible(true);
+						
+						Schema<?> fieldSchema = (Schema<?>) schemaField.get(field);
+						
+						String capitalizedFieldName = field.name.substring(0, 1).toUpperCase() + field.name.substring(1);
+
+						fieldType = capitalizedFieldName + fieldSchema.messageName();
+						
+						Class<?> fieldSchemaClass = normalizeSchemaClass(fieldSchema.getClass());
+						
+						output.append("message ").append(fieldType).append(" {\n");
+						output.append("optional string ID_ARRAY = 15;\n");
+						output.append("optional uint32 ID_ARRAY_LEN = 3;\n");
+						output.append("optional uint32 ID_ARRAY_DIMENSION = 2;\n");
+						output.append("}\n");
+						System.out.println(getClassHierarchy(fieldSchemaClass));
+						
+					}
+					else {
+						throw new IllegalStateException("unknown fieldClass " + field.getClass());
 					}
 
 				} else {
@@ -160,10 +190,35 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 
 	}
 
-	private Class<?> findMessageFieldClass(com.dyuproject.protostuff.runtime.MappedSchema.Field<?> field) {
+  private String getClassHierarchy(Class<?> cls) {
+  	StringBuilder str = new StringBuilder();
+		while (cls != Object.class) {
+			if (str.length() > 0) {
+				str.append(" < ");
+			}
+			str.append(cls.getName());
+			cls = cls.getSuperclass();
+		}
+		return str.toString();
+  }
+	
+	private Class<?> normalizeSchemaClass(Class<?> schemaClass) {
+		while (schemaClass != Object.class) {
+			if (schemaClass.getSimpleName().equals("ArraySchema")) {
+				return schemaClass;
+			}
+			schemaClass = schemaClass.getSuperclass();
+		}
+		return null;
+	}
+	
+	private Class<?> normalizeFieldClass(com.dyuproject.protostuff.runtime.MappedSchema.Field<?> field) {
 		Class<?> fieldClass = field.getClass();
 		while (fieldClass != Object.class) {
 			if (fieldClass.getSimpleName().equals("RuntimeMessageField")) {
+				return fieldClass;
+			}
+			if (fieldClass.getSimpleName().equals("RuntimeObjectField")) {
 				return fieldClass;
 			}
 			fieldClass = fieldClass.getSuperclass();
