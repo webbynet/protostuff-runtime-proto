@@ -3,11 +3,11 @@ package net_webby_protostuff_runtime;
 option java_package = "net.webby.protostuff.runtime";
 
 message ArrayObject {
-  repeated DynamicObject value = 1;
-  optional int32 dimension = 2;
+  optional string id = 15;
+  optional string mapped = 17;
   optional int32 len = 3;
-  optional int32 id = 15;
-  optional int32 mapped = 17;
+  optional int32 dimension = 2;
+  repeated DynamicObject value = 1;
 }
 
 message DynamicObject {

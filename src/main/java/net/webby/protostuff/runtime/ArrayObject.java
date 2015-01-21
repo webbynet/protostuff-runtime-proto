@@ -7,10 +7,10 @@ import com.dyuproject.protostuff.Tag;
 public final class ArrayObject {
 
 	@Tag(Constants.ID_ARRAY)
-	public int id;
+	public String id;
 	
 	@Tag(Constants.ID_ARRAY_MAPPED)
-	public int mapped;
+	public String mapped;
 	
 	@Tag(Constants.ID_ARRAY_LEN)
 	public int len;
