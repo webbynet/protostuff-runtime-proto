@@ -48,8 +48,8 @@ public final class DynamicObject {
 	public BigInteger bigIntegerValue;
 
 	@Tag(Constants.ID_DATE)
-	private Date dateValue;
+	public Date dateValue;
 	
 	@Tag(Constants.ID_ARRAY)
-	private ArrayObject arrayValue;
+	public ArrayObject arrayValue;
 }

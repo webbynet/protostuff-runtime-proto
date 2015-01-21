@@ -11,6 +11,21 @@ message ArrayObject {
 }
 
 message DynamicObject {
+  optional bool booleanValue = 1;
+  optional uint32 byteValue = 2;
+  optional uint32 charValue = 3;
+  optional uint32 shortValue = 4;
+  optional int32 intValue = 5;
+  optional int64 longValue = 6;
+  optional float floatValue = 7;
+  optional double doubleValue = 8;
+  optional string stringValue = 9;
+  optional bytes bytesValue = 10;
+  optional bytes byteArrayValue = 11;
+  optional string bigDecimalValue = 12;
+  optional bytes bigIntegerValue = 13;
+  optional fixed64 dateValue = 14;
+  optional ArrayObject arrayValue = 15;
 }
 
 message UUID {
