@@ -1,7 +1,7 @@
 Protostuff Runtime generator of proto files.
 ====
 
-Uses to generate proto files from protostuff runtime entity classes annotated by @Tag annotation from protostuff-annotation.
+Uses protostuff annotations in POJOs to generate proto files. Can be usefull to understand how protostuff actually serializes Java POJOs and to build cross platform applications where source of the protocol are protostuff entities.
 
 ### Example
 
@@ -44,4 +44,4 @@ System.out.println(content);
 
 ### Requirements
 
-This project designed to support protostuff version 1.0.9
+This project designed to support protostuff version 1.0.9. All generated files are using protostuff-default.proto import, that is located in src/main/resources/
