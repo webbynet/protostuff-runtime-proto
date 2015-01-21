@@ -33,7 +33,7 @@ public class CommonTest {
 		Assert.assertEquals(proto.getPackageName(), packageName.replace('.', '_'));
 		Assert.assertEquals(proto.getJavaPackageName(), packageName);
 		Assert.assertEquals(0, proto.getEnumGroups().size());
-		Assert.assertEquals(2, proto.getMessages().size());
+		Assert.assertEquals(1, proto.getMessages().size());
 		
 		Message commonMsg = proto.getMessage("CommonClass");
 		Assert.assertNotNull(commonMsg);
@@ -44,11 +44,6 @@ public class CommonTest {
 		Assert.assertTrue(commonMsg.getField("biValue") instanceof Field.Bytes);
 		Assert.assertTrue(commonMsg.getField("bdValue") instanceof Field.String);
 		Assert.assertTrue(commonMsg.getField("uuidValue") instanceof MessageField);
-		
-		Message uuidMsg = proto.getMessage("UUID");
-		Assert.assertEquals(2,  uuidMsg.getFieldCount());
-		Assert.assertTrue(uuidMsg.getField("mostSigBits") instanceof Field.Int64);
-		Assert.assertTrue(uuidMsg.getField("leastSigBits") instanceof Field.Int64);
 		
 	}
 	

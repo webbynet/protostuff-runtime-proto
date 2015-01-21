@@ -5,24 +5,24 @@ import com.dyuproject.protostuff.Tag;
 public class PrimitiveArraysClass {
 
 	@Tag(1)
-	private boolean[] booleanValue;
+	protected boolean[] booleanValue;
 
 	@Tag(2)
-	private byte[] byteValue;
+	protected byte[] byteValue;
 
 	@Tag(3)
-	private short[] shortValue;
+	protected short[] shortValue;
 
 	@Tag(4)
-	private int[] intValue;
+	protected int[] intValue;
 
 	@Tag(5)
-	private long[] longValue;
+	protected long[] longValue;
 
 	@Tag(6)
-	private float[] floatValue;
+	protected float[] floatValue;
 
 	@Tag(7)
-	private double[] doubleValue;
+	protected double[] doubleValue;
 	
 }

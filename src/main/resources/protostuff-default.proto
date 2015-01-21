@@ -1,0 +1,22 @@
+package net_webby_protostuff_runtime;
+
+option java_package = "net.webby.protostuff.runtime";
+
+message ArrayObject {
+  optional string ID_ARRAY = 15;
+  optional string ID_ARRAY_MAPPED = 17;
+  optional uint32 ID_ARRAY_LEN = 3;
+  optional uint32 ID_ARRAY_DIMENSION = 2;
+  repeated DynamicObject ID_OBJECT = 1;
+}
+
+message DynamicObject {
+}
+
+message UUID {
+  optional int64 mostSigBits = 1;
+  optional int64 leastSigBits = 2;
+}
+
+
+

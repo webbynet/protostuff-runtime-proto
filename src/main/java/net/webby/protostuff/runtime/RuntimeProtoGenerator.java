@@ -1,6 +1,8 @@
 package net.webby.protostuff.runtime;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -22,6 +24,23 @@ import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
 public class RuntimeProtoGenerator implements ProtoGenerator {
 
+	private static final Class<?>[] knownTypes = { java.util.UUID.class };
+	
+	static {
+		Arrays.sort(knownTypes, ClassNameComparator.INSTANCE);
+	}
+	
+	public enum ClassNameComparator implements Comparator<Class<?>> {
+		
+		INSTANCE;
+
+		@Override
+		public int compare(Class<?> arg0, Class<?> arg1) {
+			return arg0.getName().compareTo(arg1.getName());
+		}
+		
+	}
+	
 	private final Schema<?> schema;
 	private String packageName;
 	private String javaPackageName;
@@ -38,6 +57,7 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 		Class<?> typeClass = schema.typeClass();
 		this.javaPackageName = typeClass.getPackage().getName();
 		this.packageName = this.javaPackageName.replace('.', '_');
+
 	}
 	
 	@Override
@@ -69,7 +89,9 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 	public void generateInternal() {
 
 		output.append("package ").append(packageName).append(";\n\n");
-		
+
+		output.append("import \"protostuff-default.proto\";\n\n");
+
 		output.append("option java_package = \"").append(javaPackageName).append("\";\n");
 		
 		if (outerClassName != null) {
@@ -128,7 +150,7 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 						Schema<?> fieldSchema = hasSchema.getSchema();
 						fieldType = fieldSchema.messageName();
 	
-						if (!generatedMessages.contains(fieldType)) {
+						if (!generatedMessages.contains(fieldType) && Arrays.binarySearch(knownTypes, typeClass, ClassNameComparator.INSTANCE) == -1) {
 							if (generateAdditionalMessages == null) {
 								generateAdditionalMessages = new HashMap<String, Message>();
 							}
@@ -136,25 +158,16 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 						}
 					
 					}
-					if (fieldClassName.equals("RuntimeObjectField")) {
+					else if (fieldClassName.equals("RuntimeObjectField")) {
 						
-						Field schemaField = fieldClass.getDeclaredField("schema");
-						schemaField.setAccessible(true);
+						//Field schemaField = fieldClass.getDeclaredField("schema");
+						//schemaField.setAccessible(true);
 						
-						Schema<?> fieldSchema = (Schema<?>) schemaField.get(field);
+						//Schema<?> fieldSchema = (Schema<?>) schemaField.get(field);
 						
-						String capitalizedFieldName = field.name.substring(0, 1).toUpperCase() + field.name.substring(1);
-
-						fieldType = capitalizedFieldName + fieldSchema.messageName();
-						
-						Class<?> fieldSchemaClass = normalizeSchemaClass(fieldSchema.getClass());
-						
-						output.append("message ").append(fieldType).append(" {\n");
-						output.append("optional string ID_ARRAY = 15;\n");
-						output.append("optional uint32 ID_ARRAY_LEN = 3;\n");
-						output.append("optional uint32 ID_ARRAY_DIMENSION = 2;\n");
-						output.append("}\n");
-						System.out.println(getClassHierarchy(fieldSchemaClass));
+						fieldType = "ArrayObject";
+						//Class<?> fieldSchemaClass = normalizeSchemaClass(fieldSchema.getClass());
+						//System.out.println(getClassHierarchy(fieldSchemaClass));
 						
 					}
 					else {
@@ -165,6 +178,8 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 					fieldType = field.type.toString().toLowerCase();
 				}
 
+				output.append("  ");
+				
 				if (field.repeated) {
 					output.append("repeated ");
 				} else {
