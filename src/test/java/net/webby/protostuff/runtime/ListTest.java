@@ -2,10 +2,15 @@ package net.webby.protostuff.runtime;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.ArrayList;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.dyuproject.protostuff.ByteArrayInput;
+import com.dyuproject.protostuff.Input;
+import com.dyuproject.protostuff.LinkedBuffer;
+import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.parser.Field;
 import com.dyuproject.protostuff.parser.Field.Modifier;
@@ -25,6 +30,7 @@ import com.dyuproject.protostuff.runtime.RuntimeSchema;
 public class ListTest {
 
 	private Schema<ListClass> collectionSchema = RuntimeSchema.getSchema(ListClass.class);
+	private LinkedBuffer buffer = LinkedBuffer.allocate(4096);
 	
 	@Test
 	public void testGenerator() throws Exception {
@@ -65,6 +71,28 @@ public class ListTest {
 		Assert.assertTrue(msg.getField("biValue") instanceof Field.Bytes);
 		Assert.assertTrue(msg.getField("bdValue") instanceof Field.String);
 		Assert.assertTrue(msg.getField("uuidValue") instanceof MessageField);
+	}
+	
+	@Test
+	public void testIO() throws Exception {
+		
+		ListClass ins = new ListClass();
+		ins.stringValue = new ArrayList<String>();
+		ins.stringValue.add("test1");
+		ins.stringValue.add("test2");
+		
+		byte[] blob = ProtobufIOUtil.toByteArray(ins, collectionSchema, buffer);
+		
+		Input in = new ByteArrayInput(blob, false);
+
+		Assert.assertEquals(10, in.readFieldNumber(null)); // ListClass.stringValue
+	  Assert.assertEquals("test1", in.readString());
+	  
+		Assert.assertEquals(10, in.readFieldNumber(null)); // ListClass.stringValue
+	  Assert.assertEquals("test2", in.readString());
+	  
+	  Assert.assertEquals(0, in.readFieldNumber(null)); // ListClass.END
+		
 	}
 	
 }
