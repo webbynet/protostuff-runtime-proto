@@ -11,6 +11,7 @@ import com.dyuproject.protostuff.parser.Field;
 import com.dyuproject.protostuff.parser.Message;
 import com.dyuproject.protostuff.parser.Proto;
 import com.dyuproject.protostuff.parser.ProtoUtil;
+import com.dyuproject.protostuff.parser.Field.Modifier;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
 public class WrapperTest {
@@ -34,19 +35,23 @@ public class WrapperTest {
 		Assert.assertEquals(0, proto.getEnumGroups().size());
 		Assert.assertEquals(1, proto.getMessages().size());
 		
-		Message primitiveMsg = proto.getMessage("WrapperClass");
-		Assert.assertNotNull(primitiveMsg);
+		Message msg = proto.getMessage("WrapperClass");
+		Assert.assertNotNull(msg);
 		
-		Assert.assertEquals(9,  primitiveMsg.getFieldCount());
-		Assert.assertTrue(primitiveMsg.getField("booleanValue") instanceof Field.Bool);
-		Assert.assertTrue(primitiveMsg.getField("byteValue") instanceof Field.UInt32);
-		Assert.assertTrue(primitiveMsg.getField("charValue") instanceof Field.UInt32);
-		Assert.assertTrue(primitiveMsg.getField("shortValue") instanceof Field.UInt32);
-		Assert.assertTrue(primitiveMsg.getField("intValue") instanceof Field.Int32);
-		Assert.assertTrue(primitiveMsg.getField("longValue") instanceof Field.Int64);
-		Assert.assertTrue(primitiveMsg.getField("floatValue") instanceof Field.Float);
-		Assert.assertTrue(primitiveMsg.getField("doubleValue") instanceof Field.Double);
-		Assert.assertEquals("DynamicObject", primitiveMsg.getField("objValue").getJavaType());
+		for (Field<?> field : msg.getFieldMap().values()) {
+			Assert.assertEquals(Modifier.OPTIONAL, field.getModifier());
+		}
+		
+		Assert.assertEquals(9,  msg.getFieldCount());
+		Assert.assertTrue(msg.getField("booleanValue") instanceof Field.Bool);
+		Assert.assertTrue(msg.getField("byteValue") instanceof Field.UInt32);
+		Assert.assertTrue(msg.getField("charValue") instanceof Field.UInt32);
+		Assert.assertTrue(msg.getField("shortValue") instanceof Field.UInt32);
+		Assert.assertTrue(msg.getField("intValue") instanceof Field.Int32);
+		Assert.assertTrue(msg.getField("longValue") instanceof Field.Int64);
+		Assert.assertTrue(msg.getField("floatValue") instanceof Field.Float);
+		Assert.assertTrue(msg.getField("doubleValue") instanceof Field.Double);
+		Assert.assertEquals("DynamicObject", msg.getField("objValue").getJavaType());
 	}
 	
 }

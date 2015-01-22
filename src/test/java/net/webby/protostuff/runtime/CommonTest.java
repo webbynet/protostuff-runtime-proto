@@ -12,6 +12,7 @@ import com.dyuproject.protostuff.parser.Message;
 import com.dyuproject.protostuff.parser.MessageField;
 import com.dyuproject.protostuff.parser.Proto;
 import com.dyuproject.protostuff.parser.ProtoUtil;
+import com.dyuproject.protostuff.parser.Field.Modifier;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
 public class CommonTest {
@@ -35,15 +36,19 @@ public class CommonTest {
 		Assert.assertEquals(0, proto.getEnumGroups().size());
 		Assert.assertEquals(1, proto.getMessages().size());
 		
-		Message commonMsg = proto.getMessage("CommonClass");
-		Assert.assertNotNull(commonMsg);
+		Message msg = proto.getMessage("CommonClass");
+		Assert.assertNotNull(msg);
 		
-		Assert.assertEquals(5,  commonMsg.getFieldCount());
-		Assert.assertTrue(commonMsg.getField("stringValue") instanceof Field.String);
-		Assert.assertTrue(commonMsg.getField("dateValue") instanceof Field.Fixed64);
-		Assert.assertTrue(commonMsg.getField("biValue") instanceof Field.Bytes);
-		Assert.assertTrue(commonMsg.getField("bdValue") instanceof Field.String);
-		Assert.assertTrue(commonMsg.getField("uuidValue") instanceof MessageField);
+		for (Field<?> field : msg.getFieldMap().values()) {
+			Assert.assertEquals(Modifier.OPTIONAL, field.getModifier());
+		}
+		
+		Assert.assertEquals(5,  msg.getFieldCount());
+		Assert.assertTrue(msg.getField("stringValue") instanceof Field.String);
+		Assert.assertTrue(msg.getField("dateValue") instanceof Field.Fixed64);
+		Assert.assertTrue(msg.getField("biValue") instanceof Field.Bytes);
+		Assert.assertTrue(msg.getField("bdValue") instanceof Field.String);
+		Assert.assertTrue(msg.getField("uuidValue") instanceof MessageField);
 		
 	}
 	

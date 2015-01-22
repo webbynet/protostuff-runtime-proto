@@ -15,6 +15,7 @@ import com.dyuproject.protostuff.parser.Field;
 import com.dyuproject.protostuff.parser.Message;
 import com.dyuproject.protostuff.parser.Proto;
 import com.dyuproject.protostuff.parser.ProtoUtil;
+import com.dyuproject.protostuff.parser.Field.Modifier;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
 public class PrimitiveArraysTest {
@@ -39,18 +40,22 @@ public class PrimitiveArraysTest {
 		Assert.assertEquals(0, proto.getEnumGroups().size());
 		Assert.assertEquals(1, proto.getMessages().size());
 		
-		Message primitiveMsg = proto.getMessage("PrimitiveArraysClass");
-		Assert.assertNotNull(primitiveMsg);
+		Message msg = proto.getMessage("PrimitiveArraysClass");
+		Assert.assertNotNull(msg);
 		
-		Assert.assertEquals(8,  primitiveMsg.getFieldCount());
-		Assert.assertEquals("ArrayObject", primitiveMsg.getField("booleanValue").getJavaType());
-		Assert.assertTrue(primitiveMsg.getField("byteValue") instanceof Field.Bytes);
-		Assert.assertEquals("ArrayObject", primitiveMsg.getField("charValue").getJavaType());
-		Assert.assertEquals("ArrayObject", primitiveMsg.getField("shortValue").getJavaType());
-		Assert.assertEquals("ArrayObject", primitiveMsg.getField("intValue").getJavaType());
-		Assert.assertEquals("ArrayObject", primitiveMsg.getField("longValue").getJavaType());
-		Assert.assertEquals("ArrayObject", primitiveMsg.getField("floatValue").getJavaType());
-		Assert.assertEquals("ArrayObject", primitiveMsg.getField("doubleValue").getJavaType());
+		for (Field<?> field : msg.getFieldMap().values()) {
+			Assert.assertEquals(Modifier.OPTIONAL, field.getModifier());
+		}
+		
+		Assert.assertEquals(8,  msg.getFieldCount());
+		Assert.assertEquals("ArrayObject", msg.getField("booleanValue").getJavaType());
+		Assert.assertTrue(msg.getField("byteValue") instanceof Field.Bytes);
+		Assert.assertEquals("ArrayObject", msg.getField("charValue").getJavaType());
+		Assert.assertEquals("ArrayObject", msg.getField("shortValue").getJavaType());
+		Assert.assertEquals("ArrayObject", msg.getField("intValue").getJavaType());
+		Assert.assertEquals("ArrayObject", msg.getField("longValue").getJavaType());
+		Assert.assertEquals("ArrayObject", msg.getField("floatValue").getJavaType());
+		Assert.assertEquals("ArrayObject", msg.getField("doubleValue").getJavaType());
 		
 	}
 	
