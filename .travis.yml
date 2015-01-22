@@ -1,0 +1,9 @@
+language: java
+script: "mvn clean install"
+
+jdk:
+  - oraclejdk7
+
+env:
+  global:
+
