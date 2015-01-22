@@ -44,4 +44,4 @@ System.out.println(content);
 
 ### Requirements
 
-This project designed to support protostuff version 1.0.9. All generated files are using protostuff-default.proto import, that is located in src/main/resources/
+This project is designed to support protostuff version 1.0.9. All generated files are using protostuff-default.proto import, that is located in src/main/resources/
