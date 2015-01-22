@@ -3,7 +3,8 @@ package net.webby.protostuff.runtime;
 public enum RuntimeFieldType {
 
 	RuntimeMessageField,
-	RuntimeObjectField;
+	RuntimeObjectField,
+	RuntimeMapField;
 	
 	public static RuntimeFieldType findByName(String name) {
 		for (RuntimeFieldType value : values()) {

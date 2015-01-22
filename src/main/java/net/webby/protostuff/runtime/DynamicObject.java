@@ -51,5 +51,5 @@ public final class DynamicObject {
 	public Date dateValue;
 	
 	@Tag(Constants.ID_ARRAY)
-	public ArrayObject arrayValue;
+	public String arrayValue;
 }

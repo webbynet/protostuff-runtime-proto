@@ -1,6 +1,8 @@
 package net.webby.protostuff.runtime;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -129,7 +131,7 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 				String fieldType = null;
 				if (field.type == FieldType.MESSAGE) {
 
-					Pair<RuntimeFieldType, Class<?>> normField = normalizeFieldClass(field);
+					Pair<RuntimeFieldType, Class<?>> normField = ReflectionUtil.normalizeFieldClass(field);
 					if (normField == null) {
 						throw new IllegalStateException(
 								"unknown fieldClass " + field.getClass());
@@ -157,13 +159,14 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 						}
 					
 					}
-					else if (normField.getFirst() == RuntimeFieldType.RuntimeObjectField) {
+					else if (normField.getFirst() == RuntimeFieldType.RuntimeMapField || 
+							normField.getFirst() == RuntimeFieldType.RuntimeObjectField) {
 						
 						Field schemaField = fieldClass.getDeclaredField("schema");
 						schemaField.setAccessible(true);
 						
 						Schema<?> fieldSchema = (Schema<?>) schemaField.get(field);
-						Pair<RuntimeSchemaType, Class<?>> normSchema = normalizeSchemaClass(fieldSchema.getClass());
+						Pair<RuntimeSchemaType, Class<?>> normSchema = ReflectionUtil.normalizeSchemaClass(fieldSchema.getClass());
 						if (normSchema == null) {
 							throw new IllegalStateException("unknown schema type " + fieldSchema.getClass());
 						}
@@ -175,6 +178,16 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 						case ObjectSchema:
 							fieldType = "DynamicObject";
 							break;
+						case MapSchema:
+							
+							Field reflectionField = field.getClass().getDeclaredField("val$f");
+							reflectionField.setAccessible(true);
+							Field pojoField = (Field) reflectionField.get(field);
+				
+							Pair<Type, Type> keyValue = ReflectionUtil.getMapGenericTypes(pojoField.getGenericType());
+							
+							fieldType = getMapFieldType(keyValue);
+							break;							
 						}
 						
 						//System.out.println(getClassHierarchy(normSchema.getSecond()));
@@ -215,41 +228,6 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 
 	}
 
-  private String getClassHierarchy(Class<?> cls) {
-  	StringBuilder str = new StringBuilder();
-		while (cls != Object.class) {
-			if (str.length() > 0) {
-				str.append(" < ");
-			}
-			str.append(cls.getName());
-			cls = cls.getSuperclass();
-		}
-		return str.toString();
-  }
-	
-	private Pair<RuntimeSchemaType, Class<?>> normalizeSchemaClass(Class<?> schemaClass) {
-		while (schemaClass != Object.class) {
-			RuntimeSchemaType type = RuntimeSchemaType.findByName(schemaClass.getSimpleName());
-			if (type != null) {
-				return new Pair<RuntimeSchemaType, Class<?>>(type, schemaClass);
-			}
-			schemaClass = schemaClass.getSuperclass();
-		}
-		return null;
-	}
-	
-	private Pair<RuntimeFieldType, Class<?>> normalizeFieldClass(com.dyuproject.protostuff.runtime.MappedSchema.Field<?> field) {
-		Class<?> fieldClass = field.getClass();
-		while (fieldClass != Object.class) {
-			RuntimeFieldType type = RuntimeFieldType.findByName(fieldClass.getSimpleName());
-			if (type != null) {
-				return new Pair<RuntimeFieldType, Class<?>>(type, fieldClass);
-			}
-			fieldClass = fieldClass.getSuperclass();
-		}
-		return null;
-	}
-
 	private static final class Message {
 
 		final Class<?> typeClass;
@@ -259,6 +237,18 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 			this.typeClass = typeClass;
 			this.schema = schema;
 		}
+	}
+	
+	private static String getMapFieldType(Pair<Type, Type> keyValue) {
+		if (keyValue.getFirst() == String.class) {
+			if (keyValue.getSecond() == String.class) {
+				return "MapStringString";
+			}
+			else {
+				return "MapStringObject";
+			}
+		}
+		return "MapObjectObject";
 	}
 	
 }

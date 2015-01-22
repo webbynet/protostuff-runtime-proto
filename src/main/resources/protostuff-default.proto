@@ -25,7 +25,7 @@ message DynamicObject {
   optional string bigDecimalValue = 12;
   optional bytes bigIntegerValue = 13;
   optional fixed64 dateValue = 14;
-  optional ArrayObject arrayValue = 15;
+  optional string arrayValue = 15;
 }
 
 message UUID {
@@ -33,5 +33,30 @@ message UUID {
   optional int64 leastSigBits = 2;
 }
 
+message MapStringString {
+  repeated MapEntryStringString value = 1;
+}
 
+message MapEntryStringString {
+  optional string key = 1;
+  optional string value = 2;
+}
+
+message MapStringObject {
+  repeated MapEntryStringObject value = 1;
+}
+
+message MapEntryStringObject {
+  optional string key = 1;
+  optional DynamicObject value = 2;
+}
+
+message MapObjectObject {
+  repeated MapEntryObjectObject value = 1;
+}
+
+message MapEntryObjectObject {
+  optional DynamicObject key = 1;
+  optional DynamicObject value = 2;
+}
 

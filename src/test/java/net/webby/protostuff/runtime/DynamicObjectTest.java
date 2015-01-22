@@ -95,6 +95,22 @@ public class DynamicObjectTest {
 		testField(new Date(), "dateValue");
 	}
 	
+	@Test
+	public void testArray() throws Exception {
+		Integer[] arr = new Integer[] { new Integer(555), new Integer(777) };
+
+		ObjectClass ins = new ObjectClass();
+		ins.value = arr;
+		byte[] blob = ProtobufIOUtil.toByteArray(ins, objectSchema, buffer);
+		
+		DynamicObjectClass message = dynamicObjectSchema.newMessage();
+		ProtobufIOUtil.mergeFrom(blob, message, dynamicObjectSchema);
+		
+		String arrayId = message.value.arrayValue;
+		Assert.assertEquals(Integer.class.getName(), arrayId);
+		
+	}
+	
 	private void testField(Object expected, String fieldName) throws Exception {
 		
 		ObjectClass ins = new ObjectClass();
@@ -107,7 +123,7 @@ public class DynamicObjectTest {
 		Field field = DynamicObject.class.getDeclaredField(fieldName);
 
 		Object actual = field.get(message.value);
-
+		
 		if (expected.getClass().isArray()) {
 			int len = Array.getLength(expected);
 			Assert.assertEquals(len, Array.getLength(actual));

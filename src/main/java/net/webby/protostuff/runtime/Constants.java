@@ -32,4 +32,7 @@ public final class Constants {
   public static final int ID_ARRAY_DIMENSION = 2;
   public static final int ID_ARRAY_VALUE = 1;
   
+  public static final int ID_MAP_ENTRY = 1;
+  public static final int ID_MAP_KEY = 1;
+  public static final int ID_MAP_VALUE = 2;
 }
