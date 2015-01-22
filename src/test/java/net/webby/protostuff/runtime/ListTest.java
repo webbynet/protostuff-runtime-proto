@@ -3,6 +3,8 @@ package net.webby.protostuff.runtime;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -93,6 +95,31 @@ public class ListTest {
 	  
 	  Assert.assertEquals(0, in.readFieldNumber(null)); // ListClass.END
 		
+	}
+
+	@Test
+	public void testArrayList() throws Exception {
+		testImpl(new ArrayList<String>());
+	}
+	
+	@Test
+	public void testLinkedList() throws Exception {
+		testImpl(new LinkedList<String>());
+	}
+	
+	private void testImpl(List<String> listImpl) throws Exception {
+		
+		ListClass ins = new ListClass();
+		ins.stringValue = listImpl;
+		ins.stringValue.add("test1");
+		ins.stringValue.add("test2");
+		
+		byte[] blob = ProtobufIOUtil.toByteArray(ins, collectionSchema, buffer);
+		
+		ListClass message = collectionSchema.newMessage();
+		ProtobufIOUtil.mergeFrom(blob, message, collectionSchema);
+		
+		Assert.assertEquals(ArrayList.class, message.stringValue.getClass());
 	}
 	
 }

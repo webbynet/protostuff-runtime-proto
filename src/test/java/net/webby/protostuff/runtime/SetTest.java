@@ -2,7 +2,9 @@ package net.webby.protostuff.runtime;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -92,6 +94,31 @@ public class SetTest {
 	  
 	  Assert.assertEquals(0, in.readFieldNumber(null)); // ListClass.END
 		
+	}
+	
+	@Test
+	public void testHashSet() throws Exception {
+		testImpl(new HashSet<String>());
+	}
+	
+	@Test
+	public void testLinkedHashSet() throws Exception {
+		testImpl(new LinkedHashSet<String>());
+	}
+	
+	private void testImpl(Set<String> setImpl) {
+		
+		SetClass ins = new SetClass();
+		ins.stringValue = setImpl;
+		ins.stringValue.add("test1");
+		ins.stringValue.add("test2");
+		
+		byte[] blob = ProtobufIOUtil.toByteArray(ins, collectionSchema, buffer);
+		
+		SetClass message = collectionSchema.newMessage();
+		ProtobufIOUtil.mergeFrom(blob, message, collectionSchema);
+		
+		Assert.assertEquals(HashSet.class, message.stringValue.getClass());
 	}
 	
 }
