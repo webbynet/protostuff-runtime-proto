@@ -18,6 +18,7 @@ import java.util.Set;
 
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.WireFormat.FieldType;
+import com.dyuproject.protostuff.runtime.EnumIO;
 import com.dyuproject.protostuff.runtime.HasSchema;
 import com.dyuproject.protostuff.runtime.MappedSchema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
@@ -54,6 +55,7 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 	private String javaPackageName;
 	private String outerClassName = null;
 	private Set<String> generatedMessages = new HashSet<String>();
+	private Map<String, Object> generateAdditionalMessages = null;
 	private StringBuilder output = new StringBuilder();
 	
 	public RuntimeProtoGenerator(Schema<?> schema) {
@@ -108,13 +110,41 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 		
 		output.append("\n");
 
-		doGenerateProto(schema);
+		doGenerateMessage(schema);
+		
+		if (generateAdditionalMessages != null) {
+			while(!generateAdditionalMessages.isEmpty()) {
+				String key = generateAdditionalMessages.keySet().iterator().next();
+				generatedMessages.add(key);
+				Object entry = generateAdditionalMessages.remove(key);
+				if (entry != null) {
+					if (entry instanceof Message) {
+						doGenerateMessage(((Message)entry).schema);
+					}
+					else if (entry instanceof EnumObj) {
+						doGenerateEnum(((EnumObj)entry).enumClass);
+					}
+				}
+			}
+			
+		}
 
 	}
 
-	protected void doGenerateProto(Schema<?> schema) {
+	protected void doGenerateEnum(Class<?> enumClass) {
+		
+		output.append("enum ").append(enumClass.getSimpleName()).append(" {").append("\n");
 
-		Map<String, Message> generateAdditionalMessages = null;
+		for (Object val : enumClass.getEnumConstants()) {
+			Enum<?> v = (Enum<?>) val;
+			output.append("  ").append(val).append(" = ").append(v.ordinal()).append(";\n");
+		}
+		
+		output.append("}").append("\n\n");
+		
+	}
+	
+	protected void doGenerateMessage(Schema<?> schema) {
 
 		if (!(schema instanceof RuntimeSchema)) {
 			throw new IllegalStateException("invalid schema type " + schema.getClass());
@@ -135,7 +165,24 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 				com.dyuproject.protostuff.runtime.MappedSchema.Field<?> field = fields[i];
 
 				String fieldType = null;
-				if (field.type == FieldType.MESSAGE) {
+				if (field.type == FieldType.ENUM) {
+					
+					Field reflectionField = field.getClass().getDeclaredField("val$eio");
+					reflectionField.setAccessible(true);
+					EnumIO enumIO = (EnumIO) reflectionField.get(field);	
+
+					//System.out.println("enumIO = " + enumIO.enumClass);
+					
+					fieldType = enumIO.enumClass.getSimpleName();
+					
+					if (!generatedMessages.contains(fieldType)) {
+						if (generateAdditionalMessages == null) {
+							generateAdditionalMessages = new HashMap<String, Object>();
+						}
+						generateAdditionalMessages.put(fieldType, new EnumObj(enumIO.enumClass));
+					}
+				}
+				else if (field.type == FieldType.MESSAGE) {
 
 					Pair<RuntimeFieldType, Class<?>> normField = ReflectionUtil.normalizeFieldClass(field);
 					if (normField == null) {
@@ -159,7 +206,7 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 	
 						if (!generatedMessages.contains(fieldType) && Arrays.binarySearch(knownTypes, typeClass, ClassNameComparator.INSTANCE) == -1) {
 							if (generateAdditionalMessages == null) {
-								generateAdditionalMessages = new HashMap<String, Message>();
+								generateAdditionalMessages = new HashMap<String, Object>();
 							}
 							generateAdditionalMessages.put(fieldType, new Message(typeClass, fieldSchema));
 						}
@@ -225,13 +272,16 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 
 		output.append("}").append("\n\n");
 
-		if (generateAdditionalMessages != null) {
-			for (Map.Entry<String, Message> entry : generateAdditionalMessages.entrySet()) {
-				generatedMessages.add(entry.getKey());
-				doGenerateProto(entry.getValue().schema);
-			}
+	}
+	
+	private static final class EnumObj {
+		
+		final Class<?> enumClass;
+		
+		EnumObj(Class<?> enumClass) {
+			this.enumClass = enumClass;
 		}
-
+		
 	}
 
 	private static final class Message {
