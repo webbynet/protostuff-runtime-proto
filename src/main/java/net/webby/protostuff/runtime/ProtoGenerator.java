@@ -2,7 +2,7 @@ package net.webby.protostuff.runtime;
 
 
 /**
- * Proto File Generator base interface
+ * Proto File Generator interface
  * 
  * @author Alex Shvid
  *

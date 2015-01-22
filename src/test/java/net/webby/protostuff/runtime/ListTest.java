@@ -15,6 +15,13 @@ import com.dyuproject.protostuff.parser.Proto;
 import com.dyuproject.protostuff.parser.ProtoUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
+/**
+ * 
+ * @author Alex Shvid
+ *
+ */
+
+
 public class ListTest {
 
 	private Schema<ListClass> collectionSchema = RuntimeSchema.getSchema(ListClass.class);
@@ -24,7 +31,7 @@ public class ListTest {
 		
 		String content = Generators.newProtoGenerator(collectionSchema).generate();
 		
-		System.out.println(content);
+		//System.out.println(content);
 
 		Proto proto = new Proto(new File("test.proto"));
 		ProtoUtil.loadFrom(new ByteArrayInputStream(content.getBytes()), proto);

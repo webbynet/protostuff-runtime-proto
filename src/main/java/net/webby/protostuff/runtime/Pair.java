@@ -1,5 +1,12 @@
 package net.webby.protostuff.runtime;
 
+/**
+ * 
+ * @author Alex Shvid
+ *
+ */
+
+
 public final class Pair<F, S> {
 
 	private final F first;

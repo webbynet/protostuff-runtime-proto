@@ -18,6 +18,13 @@ import com.dyuproject.protostuff.parser.ProtoUtil;
 import com.dyuproject.protostuff.parser.Field.Modifier;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
+/**
+ * 
+ * @author Alex Shvid
+ *
+ */
+
+
 public class PrimitiveArraysTest {
 
 	private Schema<PrimitiveArraysClass> schema = RuntimeSchema.getSchema(PrimitiveArraysClass.class);

@@ -10,6 +10,13 @@ import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
+/**
+ * 
+ * @author Alex Shvid
+ *
+ */
+
+
 public class MapObjectTest {
 
 	private Schema<MapClass> mapSchema = RuntimeSchema.getSchema(MapClass.class);

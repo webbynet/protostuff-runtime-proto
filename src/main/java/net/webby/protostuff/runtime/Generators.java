@@ -4,7 +4,7 @@ import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
 /**
- * Collection of proto file generators based on different schema types of the Protostuff
+ * Collection of .proto file generators
  * 
  * @author Alex Shvid
  *

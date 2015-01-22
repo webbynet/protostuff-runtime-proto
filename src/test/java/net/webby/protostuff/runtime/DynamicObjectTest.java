@@ -14,6 +14,13 @@ import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
+/**
+ * 
+ * @author Alex Shvid
+ *
+ */
+
+
 public class DynamicObjectTest {
 	
 	private Schema<ObjectClass> objectSchema = RuntimeSchema.getSchema(ObjectClass.class);

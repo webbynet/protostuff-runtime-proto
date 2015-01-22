@@ -1,5 +1,11 @@
 package net.webby.protostuff.runtime;
 
+/**
+ * 
+ * @author Alex Shvid
+ *
+ */
+
 public enum RuntimeSchemaType {
 
 	ArraySchema,

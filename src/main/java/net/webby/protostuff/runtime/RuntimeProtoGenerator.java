@@ -1,7 +1,13 @@
 package net.webby.protostuff.runtime;
 
+/**
+ * 
+ * @author Alex Shvid
+ *
+ */
+
+
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -17,7 +23,7 @@ import com.dyuproject.protostuff.runtime.MappedSchema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
 /**
- * Proto Generator from Protostuff Runtime Schema
+ * Proto File Generator from Protostuff Runtime Schema
  * 
  * 
  * @author Alex Shvid

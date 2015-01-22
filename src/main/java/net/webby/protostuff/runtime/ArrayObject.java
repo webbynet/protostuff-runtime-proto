@@ -4,6 +4,13 @@ import java.util.List;
 
 import com.dyuproject.protostuff.Tag;
 
+/**
+ * 
+ * @author Alex Shvid
+ *
+ */
+
+
 public final class ArrayObject {
 
 	@Tag(Constants.ID_ARRAY)

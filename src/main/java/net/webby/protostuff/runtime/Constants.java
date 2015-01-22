@@ -1,5 +1,12 @@
 package net.webby.protostuff.runtime;
 
+/**
+ * 
+ * @author Alex Shvid
+ *
+ */
+
+
 public final class Constants {
 
   public static final int ID_BOOL = 1, ID_BYTE = 2, ID_CHAR = 3, ID_SHORT = 4, 

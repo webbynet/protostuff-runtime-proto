@@ -6,6 +6,13 @@ import java.util.Date;
 
 import com.dyuproject.protostuff.Tag;
 
+/**
+ * 
+ * @author Alex Shvid
+ *
+ */
+
+
 public final class DynamicObject {
 
 	@Tag(Constants.ID_BOOL)

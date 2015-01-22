@@ -8,6 +8,13 @@ import java.util.UUID;
 
 import com.dyuproject.protostuff.Tag;
 
+/**
+ * 
+ * @author Alex Shvid
+ *
+ */
+
+
 public class ListClass {
 
 	@Tag(1)

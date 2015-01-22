@@ -13,6 +13,12 @@ import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.Tag;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
+/**
+ * 
+ * @author Alex Shvid
+ *
+ */
+
 public class ArrayObjectTest {
 
 	private Schema<ArrayObjectClass> arrayObjectSchema = RuntimeSchema.getSchema(ArrayObjectClass.class);
