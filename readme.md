@@ -5,6 +5,7 @@ Uses protostuff annotations in POJOs to generate proto files. Can be usefull to 
 
 ### Example
 
+For POJO:
 ```
 class User {
   @Tag(1)
@@ -14,7 +15,7 @@ class User {
 }
 ```
 
-Will be generated to proto file:
+Will be generated a .proto file:
 ```
 message User {
   optional int64 id = 1;
