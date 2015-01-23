@@ -122,6 +122,11 @@ public class DynamicObjectTest {
 	public void testObject() throws Exception {
 		testField(new Object(), "objectValue", new JavaObject());
 	}
+
+	@Test
+	public void testPojo() throws Exception {
+		testField(new NestedObject(), "pojoClass", NestedObject.class.getName());
+	}
 	
 	private void testField(Object expected, String fieldName) throws Exception {
 		testField(expected, fieldName, expected);

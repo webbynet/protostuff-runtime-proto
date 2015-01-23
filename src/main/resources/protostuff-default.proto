@@ -31,7 +31,9 @@ message DynamicObject {
   optional bytes bigIntegerValue = 13;
   optional fixed64 dateValue = 14;
   optional string arrayClass = 15;
+  optional JavaObject objectValue = 16;  
   optional string enumClass = 24;
+  optional string pojoClass = 127;
 }
 
 message JavaObject {

@@ -67,4 +67,7 @@ public final class DynamicObject {
 	@Tag(Constants.ID_OBJECT)
 	public JavaObject objectValue;
 	
+	@Tag(Constants.ID_POJO)
+	public String pojoClass;
+	
 }
