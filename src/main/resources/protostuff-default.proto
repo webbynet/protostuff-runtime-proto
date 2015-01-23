@@ -30,7 +30,8 @@ message DynamicObject {
   optional string bigDecimalValue = 12;
   optional bytes bigIntegerValue = 13;
   optional fixed64 dateValue = 14;
-  optional string arrayValue = 15;
+  optional string arrayClass = 15;
+  optional string enumClass = 24;
 }
 
 message UUID {

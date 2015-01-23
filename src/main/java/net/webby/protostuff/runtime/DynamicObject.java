@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
+import com.dyuproject.protostuff.ByteString;
 import com.dyuproject.protostuff.Tag;
 
 /**
@@ -43,7 +44,7 @@ public final class DynamicObject {
 	public String stringValue;
 	
 	@Tag(Constants.ID_BYTES)
-	public byte[] bytesValue;
+	public ByteString bytesValue;
 
 	@Tag(Constants.ID_BYTE_ARRAY)
 	public byte[] byteArrayValue;
@@ -58,9 +59,9 @@ public final class DynamicObject {
 	public Date dateValue;
 	
 	@Tag(Constants.ID_ARRAY)
-	public String arrayValue;
+	public String arrayClass;
 	
 	@Tag(Constants.ID_ENUM)
-	public String enumValue;
+	public String enumClass;
 	
 }

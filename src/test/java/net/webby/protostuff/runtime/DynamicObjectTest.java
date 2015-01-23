@@ -9,6 +9,7 @@ import java.util.Date;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.dyuproject.protostuff.ByteString;
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.Schema;
@@ -81,7 +82,12 @@ public class DynamicObjectTest {
 	public void testString() throws Exception {
 		testField("str", "stringValue");
 	}
-	
+
+	@Test
+	public void testBytes() throws Exception {
+		testField(ByteString.copyFrom(new byte[] { 0x45, 0x23 }), "bytesValue");
+	}
+
 	@Test
 	public void testByteArray() throws Exception {
 		testField(new byte[] { 0x45, 0x23 }, "byteArrayValue");
@@ -104,12 +110,12 @@ public class DynamicObjectTest {
 
 	@Test
 	public void testEnum() throws Exception {
-		testField(SimpleEnum.VALUE1, "enumValue", SimpleEnum.class.getName());
+		testField(SimpleEnum.VALUE1, "enumClass", SimpleEnum.class.getName());
 	}
 
 	@Test
 	public void testArray() throws Exception {
-		testField(new Integer[] { new Integer(555), new Integer(777) }, "arrayValue", Integer.class.getName());
+		testField(new Integer[] { new Integer(555), new Integer(777) }, "arrayClass", Integer.class.getName());
 	}
 
 	private void testField(Object expected, String fieldName) throws Exception {
