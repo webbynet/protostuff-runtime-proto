@@ -25,11 +25,11 @@ message User {
 
 ### How to use
 
-* Build this project by
+* Build the project by:
 ```
 mvn clean install
 ```
-* Include this dependency to your pom file
+* Include this dependency to your pom file:
 ```
 <dependency>
   <groupId>net.webby.proto</groupId>
@@ -37,7 +37,7 @@ mvn clean install
   <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
-* Use generator API to generate proto files
+* Use generator API to generate .proto files in your project:
 ```
 String content = Generators.newProtoGenerator(schema).generate();
 System.out.println(content);
