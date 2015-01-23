@@ -64,4 +64,7 @@ public final class DynamicObject {
 	@Tag(Constants.ID_ENUM)
 	public String enumClass;
 	
+	@Tag(Constants.ID_OBJECT)
+	public JavaObject objectValue;
+	
 }

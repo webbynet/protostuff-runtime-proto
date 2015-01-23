@@ -109,15 +109,20 @@ public class DynamicObjectTest {
 	}
 
 	@Test
+	public void testArray() throws Exception {
+		testField(new Integer[] { new Integer(555), new Integer(777) }, "arrayClass", Integer.class.getName());
+	}
+
+	@Test
 	public void testEnum() throws Exception {
 		testField(SimpleEnum.VALUE1, "enumClass", SimpleEnum.class.getName());
 	}
 
 	@Test
-	public void testArray() throws Exception {
-		testField(new Integer[] { new Integer(555), new Integer(777) }, "arrayClass", Integer.class.getName());
+	public void testObject() throws Exception {
+		testField(new Object(), "objectValue", new JavaObject());
 	}
-
+	
 	private void testField(Object expected, String fieldName) throws Exception {
 		testField(expected, fieldName, expected);
 	}

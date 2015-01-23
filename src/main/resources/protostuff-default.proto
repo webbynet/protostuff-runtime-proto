@@ -34,6 +34,10 @@ message DynamicObject {
   optional string enumClass = 24;
 }
 
+message JavaObject {
+  optional bool unknown = 1;
+}
+
 message UUID {
   optional int64 mostSigBits = 1;
   optional int64 leastSigBits = 2;
