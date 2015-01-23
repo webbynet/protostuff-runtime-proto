@@ -204,7 +204,7 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 						Schema<?> fieldSchema = hasSchema.getSchema();
 						fieldType = fieldSchema.messageName();
 	
-						if (!generatedMessages.contains(fieldType) && Arrays.binarySearch(knownTypes, typeClass, ClassNameComparator.INSTANCE) == -1) {
+						if (!generatedMessages.contains(fieldType) && Arrays.binarySearch(knownTypes, typeClass, ClassNameComparator.INSTANCE) < 0) {
 							if (generateAdditionalMessages == null) {
 								generateAdditionalMessages = new HashMap<String, Object>();
 							}
