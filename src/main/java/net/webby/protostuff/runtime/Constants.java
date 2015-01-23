@@ -42,4 +42,7 @@ public final class Constants {
   public static final int ID_MAP_ENTRY = 1;
   public static final int ID_MAP_KEY = 1;
   public static final int ID_MAP_VALUE = 2;
+  
+  public static final int ID_ENUM_VALUE = 1;
+  
 }

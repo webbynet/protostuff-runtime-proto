@@ -101,24 +101,22 @@ public class DynamicObjectTest {
 	public void testDate() throws Exception {
 		testField(new Date(), "dateValue");
 	}
-	
+
+	@Test
+	public void testEnum() throws Exception {
+		testField(SimpleEnum.VALUE1, "enumValue", SimpleEnum.class.getName());
+	}
+
 	@Test
 	public void testArray() throws Exception {
-		Integer[] arr = new Integer[] { new Integer(555), new Integer(777) };
+		testField(new Integer[] { new Integer(555), new Integer(777) }, "arrayValue", Integer.class.getName());
+	}
 
-		ObjectClass ins = new ObjectClass();
-		ins.value = arr;
-		byte[] blob = ProtobufIOUtil.toByteArray(ins, objectSchema, buffer);
-		
-		DynamicObjectClass message = dynamicObjectSchema.newMessage();
-		ProtobufIOUtil.mergeFrom(blob, message, dynamicObjectSchema);
-		
-		String arrayId = message.value.arrayValue;
-		Assert.assertEquals(Integer.class.getName(), arrayId);
-		
+	private void testField(Object expected, String fieldName) throws Exception {
+		testField(expected, fieldName, expected);
 	}
 	
-	private void testField(Object expected, String fieldName) throws Exception {
+	private void testField(Object expected, String fieldName, Object expectedObject) throws Exception {
 		
 		ObjectClass ins = new ObjectClass();
 		ins.value = expected;
@@ -131,17 +129,17 @@ public class DynamicObjectTest {
 
 		Object actual = field.get(message.value);
 		
-		if (expected.getClass().isArray()) {
-			int len = Array.getLength(expected);
+		if (expectedObject.getClass().isArray()) {
+			int len = Array.getLength(expectedObject);
 			Assert.assertEquals(len, Array.getLength(actual));
 			for (int i = 0; i != len; ++i) {
-				Object e = Array.get(expected, i);
+				Object e = Array.get(expectedObject, i);
 				Object a = Array.get(actual, i);
 				Assert.assertEquals(e, a);
 			}
 		}
 		else {
-			Assert.assertEquals(expected, actual);
+			Assert.assertEquals(expectedObject, actual);
 		}
 		
 	}

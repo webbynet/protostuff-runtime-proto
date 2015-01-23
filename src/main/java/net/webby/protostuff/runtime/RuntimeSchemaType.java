@@ -10,7 +10,8 @@ public enum RuntimeSchemaType {
 
 	ArraySchema,
 	ObjectSchema,
-	MapSchema;
+	MapSchema,
+	PolymorphicEnumSchema;
 	
 	public static RuntimeSchemaType findByName(String name) {
 		for (RuntimeSchemaType value : values()) {

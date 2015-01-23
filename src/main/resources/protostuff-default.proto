@@ -10,6 +10,11 @@ message ArrayObject {
   repeated DynamicObject value = 1;
 }
 
+message EnumObject {
+  optional string enumId = 24;
+  optional int32 ordinal = 1;
+}
+
 message DynamicObject {
   optional bool booleanValue = 1;
   optional uint32 byteValue = 2;

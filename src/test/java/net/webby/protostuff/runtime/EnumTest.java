@@ -49,9 +49,10 @@ public class EnumTest {
 			Assert.assertEquals(Modifier.OPTIONAL, field.getModifier());
 		}
 		
-		Assert.assertEquals(2,  msg.getFieldCount());
+		Assert.assertEquals(3,  msg.getFieldCount());
 		Assert.assertEquals("SimpleEnum", msg.getField("simpleEnum").getJavaType());
 		Assert.assertEquals("StringEnum", msg.getField("stringEnum").getJavaType());
+		Assert.assertEquals("EnumObject", msg.getField("enumValue").getJavaType());
 		
 		EnumGroup enumGroup = proto.getEnumGroup("SimpleEnum");
 		Assert.assertEquals(2, enumGroup.getValueCount());

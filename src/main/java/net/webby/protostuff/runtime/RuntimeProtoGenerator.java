@@ -240,7 +240,11 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 							Pair<Type, Type> keyValue = ReflectionUtil.getMapGenericTypes(pojoField.getGenericType());
 							
 							fieldType = getMapFieldType(keyValue);
-							break;							
+							break;					
+							
+						case PolymorphicEnumSchema:
+							fieldType = "EnumObject";
+							break;
 						}
 						
 						//System.out.println(getClassHierarchy(normSchema.getSecond()));

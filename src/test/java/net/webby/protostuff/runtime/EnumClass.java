@@ -15,5 +15,8 @@ public class EnumClass {
 
 	@Tag(2)
 	protected StringEnum stringEnum;
-	
+
+	@Tag(3)
+	protected Enum<?> enumValue;
+
 }

@@ -59,4 +59,8 @@ public final class DynamicObject {
 	
 	@Tag(Constants.ID_ARRAY)
 	public String arrayValue;
+	
+	@Tag(Constants.ID_ENUM)
+	public String enumValue;
+	
 }
