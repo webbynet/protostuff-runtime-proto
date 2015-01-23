@@ -1,4 +1,4 @@
-Protostuff Runtime generator of proto files.
+Protostuff runtime generator for .proto files
 ====
 
 Uses protostuff annotations in POJOs to generate proto files. Can be usefull to understand how protostuff actually serializes Java POJOs and to build cross platform applications where source of the protocol are protostuff entities.
