@@ -6,7 +6,7 @@ Uses protostuff annotations in POJOs to generate proto files. Can be usefull to 
 ### Example
 
 For POJO:
-```
+```java
 class User {
   @Tag(1)
   long id;
@@ -16,7 +16,7 @@ class User {
 ```
 
 Will be generated a .proto file:
-```
+```proto
 message User {
   optional int64 id = 1;
   optional string name = 2;
@@ -26,11 +26,11 @@ message User {
 ### How to use
 
 * Build the project by:
-```
+```sh
 mvn clean install
 ```
 * Include this dependency to your pom file:
-```
+```xml
 <dependency>
   <groupId>net.webby.proto</groupId>
   <artifactId>protostuff-runtime-proto</artifactId>
@@ -38,7 +38,8 @@ mvn clean install
 </dependency>
 ```
 * Use generator API to generate .proto files in your project:
-```
+```java
+Schema<User> schema = RuntimeSchema.getSchema(User.class);
 String content = Generators.newProtoGenerator(schema).generate();
 System.out.println(content);
 ```
