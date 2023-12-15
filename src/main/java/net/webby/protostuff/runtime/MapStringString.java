@@ -2,7 +2,7 @@ package net.webby.protostuff.runtime;
 
 import java.util.List;
 
-import com.dyuproject.protostuff.Tag;
+import io.protostuff.Tag;
 
 /**
  * 

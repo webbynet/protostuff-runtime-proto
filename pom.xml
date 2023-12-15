@@ -10,7 +10,7 @@
 	<description>Protostuff Runtime Proto Files Generator</description>
 
     <properties>
-      <protostuff.version>1.0.9</protostuff.version>
+      <protostuff.version>1.7.4</protostuff.version>
       <antlr3.version>3.2</antlr3.version>
     </properties>
 

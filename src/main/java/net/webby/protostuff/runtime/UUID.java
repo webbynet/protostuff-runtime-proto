@@ -1,6 +1,6 @@
 package net.webby.protostuff.runtime;
 
-import com.dyuproject.protostuff.Tag;
+import io.protostuff.Tag;
 
 /**
  * 

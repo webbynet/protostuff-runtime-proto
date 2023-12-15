@@ -13,15 +13,15 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.dyuproject.protostuff.Schema;
-import com.dyuproject.protostuff.WireFormat.FieldType;
-import com.dyuproject.protostuff.runtime.EnumIO;
-import com.dyuproject.protostuff.runtime.HasSchema;
-import com.dyuproject.protostuff.runtime.MappedSchema;
-import com.dyuproject.protostuff.runtime.RuntimeSchema;
+import io.protostuff.Schema;
+import io.protostuff.WireFormat.FieldType;
+import io.protostuff.runtime.EnumIO;
+import io.protostuff.runtime.HasSchema;
+import io.protostuff.runtime.RuntimeSchema;
 
 /**
  * Proto File Generator from Protostuff Runtime Schema
@@ -150,19 +150,15 @@ public class RuntimeProtoGenerator implements ProtoGenerator {
 			throw new IllegalStateException("invalid schema type " + schema.getClass());
 		}
 
-		RuntimeSchema<?> runtimeSchema = (RuntimeSchema<?>) schema;
+		RuntimeSchema runtimeSchema = (RuntimeSchema) schema;
 
 		output.append("message ").append(runtimeSchema.messageName()).append(" {").append("\n");
 
 		try {
-			Field fieldsField = MappedSchema.class.getDeclaredField("fields");
-			fieldsField.setAccessible(true);
-			com.dyuproject.protostuff.runtime.MappedSchema.Field<?>[] fields = (com.dyuproject.protostuff.runtime.MappedSchema.Field<?>[]) fieldsField
-					.get(runtimeSchema);
+			List<io.protostuff.runtime.Field> fields = runtimeSchema.getFields();
+			for (int i = 0; i != fields.size(); ++i) {
 
-			for (int i = 0; i != fields.length; ++i) {
-
-				com.dyuproject.protostuff.runtime.MappedSchema.Field<?> field = fields[i];
+				io.protostuff.runtime.Field<?> field = fields.get(i);
 
 				String fieldType = null;
 				if (field.type == FieldType.ENUM) {

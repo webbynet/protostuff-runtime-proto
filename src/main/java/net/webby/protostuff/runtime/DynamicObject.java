@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
-import com.dyuproject.protostuff.ByteString;
-import com.dyuproject.protostuff.Tag;
+import io.protostuff.ByteString;
+import io.protostuff.Tag;
 
 /**
  * 
