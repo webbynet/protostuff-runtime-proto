@@ -51,7 +51,7 @@ public final class ReflectionUtil {
 		return null;
 	}
 	
-	public static Pair<RuntimeFieldType, Class<?>> normalizeFieldClass(com.dyuproject.protostuff.runtime.MappedSchema.Field<?> field) {
+	public static Pair<RuntimeFieldType, Class<?>> normalizeFieldClass(io.protostuff.runtime.Field<?> field) {
 		Class<?> fieldClass = field.getClass();
 		while (fieldClass != Object.class) {
 			RuntimeFieldType type = RuntimeFieldType.findByName(fieldClass.getSimpleName());
